@@ -9,58 +9,59 @@ const client = new Client({
 });
 
 client.once('ready', () => {
-    console.log(`Logged in as ${client.user.tag}`);
+    console.log(`✅ Logged in as ${client.user.tag}`);
 });
 
 client.on('guildMemberAdd', async (member) => {
-    const channel = member.guild.channels.cache.get(process.env.WELCOME_CHANNEL_ID);
-    if (!channel) return;
+    // Fetch the channel directly instead of relying on cache
+    const channel = await client.channels.fetch(process.env.WELCOME_CHANNEL_ID).catch(() => null);
+    if (!channel) return console.log('Welcome channel not found!');
 
     const memberCount = member.guild.memberCount;
     const suffix = getOrdinalSuffix(memberCount);
 
     const welcomeEmbed = new EmbedBuilder()
         .setColor(0x57F287)
-        .setTitle(`Welcome to ${member.guild.name}!`)
+        .setTitle(`👋 Welcome to ${member.guild.name}!`)
         .setDescription(
             `Hey ${member}, we're happy to have you here!\n\n` +
-            `Make sure to read the rules and enjoy your stay.`
+            `Make sure to read the rules and enjoy your stay. 🎉`
         )
-        .setThumbnail(member.user.displayAvatarURL({dynamic: true, size: 256}))
+        .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
         .addFields(
-            { name: 'Username', value: member.user.tag, inline: true },
-            { name: 'Account Created', value: `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>`, inline: true },
+            { name: '📛 Username', value: member.user.tag, inline: true },
+            { name: '📅 Account Created', value: `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>`, inline: true },
         )
-        .setFooter({ text: `You're our ${memberCount}${suffix} member!` })
+        .setFooter({ text: `🎊 You're our ${memberCount}${suffix} member!` })
         .setTimestamp();
-    
+
     channel.send({ embeds: [welcomeEmbed] });
 });
 
 client.on('guildMemberRemove', async (member) => {
-    const channel = member.guild.channels.cache.get(process.env.GOODBYE_CHANNEL_ID);
-    if (!channel) return;
+    const channel = await client.channels.fetch(process.env.GOODBYE_CHANNEL_ID).catch(() => null);
+    if (!channel) return console.log('Goodbye channel not found!');
 
     const memberCount = member.guild.memberCount;
     const suffix = getOrdinalSuffix(memberCount);
 
     const goodbyeEmbed = new EmbedBuilder()
         .setColor(0xED4245)
-        .setTitle('Someone just left.')
+        .setTitle('😢 Someone just left...')
         .setDescription(
-            `**$(member.user.tag)** has left the server.\n\n` +
-            `We hope to see you again someday!`
+            `**${member.user.tag}** has left the server.\n\n` +
+            `We hope to see you again someday! 👋`
         )
         .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
         .addFields(
-            { name: 'Username', value: member.user.tag, inline: true },
-            { name: 'Was here since', value: `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`, inline: true },
+            { name: '📛 Username', value: member.user.tag, inline: true },
+            { name: '📅 Was here since', value: `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`, inline: true },
         )
         .setFooter({ text: `We now have ${memberCount}${suffix} members.` })
         .setTimestamp();
-    
+
     channel.send({ embeds: [goodbyeEmbed] });
-})
+});
 
 function getOrdinalSuffix(n) {
     const s = ["th", "st", "nd", "rd"];
