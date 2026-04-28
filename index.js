@@ -55,12 +55,11 @@ client.on('guildMemberRemove', async (member) => {
         .setColor(0xED4245)
         .setTitle('😢 Someone just left...')
         .setDescription(
-            `**${member.user.tag}** has left the server.\n\n` +
-            `We hope to see you again someday! 👋`
+            `**${member.user.tag}** has left the server. We'll miss you!\n\n` +
+            `We hope to see you again someday and wish you all the best. 👋`
         )
         .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
         .addFields(
-            { name: '\u200b', value: '\u200b─────────────────────────────', inline: false },
             { name: '📛 Username', value: member.user.tag, inline: true },
             { name: '📅 Was here since', value: `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`, inline: true },
         )
