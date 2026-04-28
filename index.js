@@ -60,6 +60,7 @@ client.on('guildMemberRemove', async (member) => {
         )
         .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
         .addFields(
+            { name: '\u200b', value: '\u200b─────────────────────────────', inline: false },
             { name: '📛 Username', value: member.user.tag, inline: true },
             { name: '📅 Was here since', value: `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`, inline: true },
         )
