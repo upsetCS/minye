@@ -13,9 +13,15 @@ client.once('clientReady', () => {
 });
 
 client.on('guildMemberAdd', async (member) => {
-    // Fetch the channel directly instead of relying on cache
     const channel = await client.channels.fetch(process.env.WELCOME_CHANNEL_ID).catch(() => null);
     if (!channel) return console.log('Welcome channel not found!');
+
+    const role = member.guild.roles.cache.get(process.env.MEMBER_ROLE_ID);
+    if (role) {
+        await member.roles.add(role).catch(err => console.log('Could not assing role: ', err));
+    } else {
+        console.log('Member role not found!');
+    }
 
     const memberCount = member.guild.memberCount;
     const suffix = getOrdinalSuffix(memberCount);
