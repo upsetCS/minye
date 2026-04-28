@@ -56,7 +56,7 @@ client.on('guildMemberRemove', async (member) => {
         .setTitle('😢 Someone just left...')
         .setDescription(
             `**${member.user.tag}** has left the server. We'll miss you!\n\n` +
-            `We hope to see you again someday and wish you all the best. 👋`
+            `We hope to see you again someday and luck in all. 👋`
         )
         .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
         .addFields(
